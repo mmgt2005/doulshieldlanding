@@ -29,15 +29,15 @@
     .ds-hamburger { display: flex !important; }
     nav img { height: 44px !important; }
     [style*="grid-template-columns: 1.05fr"] { grid-template-columns: 1fr !important; }
-    [style*="repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+    [style*="repeat(4, 1fr)"] { grid-template-columns: 1fr !important; }
     [style*="repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
     [style*="grid-template-columns: 1fr 1fr"] { grid-template-columns: 1fr !important; }
     [style*="font-size: 60px"] { font-size: 40px !important; }
     [style*="font-size: 46px"] { font-size: 33px !important; }
     [style*="font-size: 42px"] { font-size: 31px !important; }
     [style*="font-size: 40px"] { font-size: 29px !important; }
-    .ds-tablewrap { overflow-x: auto !important; }
-    .ds-tablewrap table { min-width: 620px; }
+    .ds-tablewrap { display: none !important; }
+    .ds-comparecards { display: block !important; }
     #ds-hero { width: 100% !important; max-width: 420px; height: auto !important; }
   }
 </style>
@@ -252,6 +252,22 @@
             </sc-for>
           </tbody>
         </table>
+      </div>
+      <div class="ds-comparecards" style="display: none;">
+        <sc-for list="{{ compareCards }}" as="card" hint-placeholder-count="3">
+          <div style="border: 1px solid #EADBCB; border-radius: 16px; background: #fff; margin-bottom: 16px; overflow: hidden;">
+            <div style="padding: 18px 20px; border-bottom: 1px solid #EFE3D5; background: {{ card.headBg }};">
+              <div style="font-weight: 800; font-size: 16px; color: {{ card.accent }};">{{ card.name }}</div>
+              <div style="font-weight: 600; font-size: 12px; color: #8A7480; margin-top: 4px;">{{ card.price }}</div>
+            </div>
+            <sc-for list="{{ card.rows }}" as="row" hint-placeholder-count="9">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid #F5EBDF;">
+                <span style="font-size: 13.5px; font-weight: 600; color: #331A24;">{{ row.label }}</span>
+                <span style="{{ row.markStyle }}">{{ row.mark }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-for>
       </div>
       <div style="text-align: center; margin-top: 30px;">
         <button onClick="{{ goWebinar }}" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 14px 30px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 24px rgba(191,32,111,0.28);">Register for a webinar</button>
@@ -921,6 +937,24 @@ class Component extends DCLogic {
           return {
             cellStyle: `padding: 15px 16px; text-align: center; border-bottom: 1px solid #EFE3D5; background: ${col.highlight ? '#FDF3F8' : 'transparent'};`,
             markStyle: `font-size: ${isText ? '11.5px' : '18px'}; font-weight: ${weight}; color: ${color}; ${isText ? 'letter-spacing:0.02em; text-transform:uppercase;' : ''}`,
+            mark,
+          };
+        }),
+      })),
+      compareCards: this.compareColumns.map((col) => ({
+        name: col.name, price: col.price, accent: col.accent,
+        headBg: col.highlight ? '#FDF3F8' : '#FBF5ED',
+        rows: this.compareRows.map((row) => {
+          const v = row[col.key];
+          let mark = '\u2013', color = '#C9BBAF', weight = '700';
+          if (v === true) { mark = '\u2713'; color = col.accent; weight = '900'; }
+          else if (v === 'enroll') { mark = 'With enrollment'; color = col.accent; weight = '700'; }
+          else if (v === 'addon') { mark = 'With enrollment tier'; color = col.accent; weight = '700'; }
+          else if (v === 'partial') { mark = 'Self-serve'; color = '#8A7480'; weight = '700'; }
+          const isText = (v === 'enroll' || v === 'partial' || v === 'addon');
+          return {
+            label: row.label,
+            markStyle: `font-size: ${isText ? '11px' : '17px'}; font-weight: ${weight}; color: ${color}; flex-shrink: 0; text-align: right; ${isText ? 'letter-spacing:0.02em; text-transform:uppercase;' : ''}`,
             mark,
           };
         }),
