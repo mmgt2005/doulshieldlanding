@@ -369,7 +369,7 @@
 
         <div style="display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap;">
           <button onClick="{{ bookSetupCall }}" style="background: #F88017; color: #fff; border: none; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 10px 24px rgba(248,128,23,0.28);">Book a setup call</button>
-          <button onClick="{{ goQuiz }}" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;">Take the free quiz next</button>
+          <button onClick="{{ goQuizFromWebinar }}" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;">Take the free quiz next</button>
           <button onClick="{{ goHome }}" style="background: #fff; color: #331A24; border: 1.5px solid #EADBCB; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;">Back to home</button>
         </div>
       </div>
@@ -607,6 +607,9 @@ class Component extends DCLogic {
     reg: null, // { first_name, last_name, email } captured at registration, for Q&A attribution
     openFaq: -1,
     menuOpen: false,
+    // webinar engagement timestamps (ISO strings), attached to whichever lead follows
+    webinarReachedAt: null,
+    webinarCtaClickedAt: null,
   };
 
   howItWorks = [
@@ -985,8 +988,15 @@ class Component extends DCLogic {
             email: reg.email || '', organization_name: reg.organization_name || '',
             message: 'I just watched the ' + selectedWebinarTitle + ' and would like to book a setup call to get started with DoulaShield.',
           },
+          webinarCtaClickedAt: new Date().toISOString(),
         });
         this.go('contact', 'contact');
+      },
+      // "Take the free quiz next" from the webinar success panel specifically — distinct
+      // from the generic goQuiz (nav/hero/footer) so only this path stamps the CTA click time.
+      goQuizFromWebinar: () => {
+        this.setState({ webinarCtaClickedAt: new Date().toISOString() });
+        this.go('quiz', 'quiz');
       },
       // Q&A chat
       chatInput: s.chatInput,
@@ -1021,6 +1031,8 @@ class Component extends DCLogic {
           webinarSubmitted: true,
           webinarName: el.first_name.value,
           reg: { first_name: el.first_name.value, last_name: el.last_name.value, email: el.email.value, organization_name: el.organization_name.value },
+          webinarReachedAt: new Date().toISOString(),
+          webinarCtaClickedAt: null,
         });
         if (typeof window !== 'undefined') window.scrollTo(0, 0);
       },
@@ -1063,6 +1075,8 @@ class Component extends DCLogic {
           email: el.leademail.value,
           provider_type: 'independent',
           answers,
+          webinar_reached_at: s.webinarReachedAt,
+          webinar_cta_clicked_at: s.webinarCtaClickedAt,
         });
         this.setState({ indLeadSent: true, indLeadEmail: el.leademail.value });
       },
@@ -1084,6 +1098,8 @@ class Component extends DCLogic {
           organization_name: el.leadorg.value,
           provider_type: 'agency',
           answers,
+          webinar_reached_at: s.webinarReachedAt,
+          webinar_cta_clicked_at: s.webinarCtaClickedAt,
         });
         this.setState({ agencyLeadSent: true, agencyLeadEmail: el.leademail.value });
       },
@@ -1105,6 +1121,8 @@ class Component extends DCLogic {
           email: el.email.value,
           organization_name: el.organization_name.value,
           message: el.message.value,
+          webinar_reached_at: s.webinarReachedAt,
+          webinar_cta_clicked_at: s.webinarCtaClickedAt,
         });
         this.setState({ contactSubmitted: true, contactName: el.first_name.value });
         if (typeof window !== 'undefined') window.scrollTo(0, 0);

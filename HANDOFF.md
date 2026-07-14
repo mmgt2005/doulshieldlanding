@@ -51,6 +51,17 @@ Empty optional fields are stripped client-side before sending.
   `provider_type: "agency"`, free-form `answers`.
 - **Contact form** → `/contact` — name/email, optional `organization_name`, `message`.
 
+**Webinar engagement timestamps:** if a visitor registered for a webinar earlier in the
+session, the `/quiz` and `/contact` payloads above also carry `webinar_reached_at` (ISO
+timestamp — when the webinar video/success view first appeared) and
+`webinar_cta_clicked_at` (ISO timestamp — when they clicked "Book a setup call" or "Take
+the free quiz next" from that panel). Backend can diff the two for elapsed watch time.
+Both are `null`/omitted for leads that didn't come through the webinar flow. This is a
+time-on-page approximation, not proof the video was actually watched — the page doesn't
+integrate any video-provider SDK to detect real playback/completion (embeds can be
+YouTube, Vimeo, or Loom depending on what's set in Tweaks, so there's no single generic
+"video ended" event without picking one provider's JS SDK).
+
 Lead POST is **fire-and-forget** — the UI advances to the success/video state immediately
 and does not wait for or gate on the API response.
 
