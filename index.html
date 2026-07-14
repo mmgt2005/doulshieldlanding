@@ -393,11 +393,11 @@
       <form onSubmit="{{ submitWebinar }}" style="background: #fff; border: 1px solid #EADBCB; border-radius: 22px; padding: 36px;">
         <div style="font-weight: 800; font-size: 18px; margin-bottom: 20px;">Reserve your seat — {{ selectedWebinarTitle }}</div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">First name</span><input name="first_name" required="" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Last name</span><input name="last_name" required="" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">First name</span><input name="first_name" required="required" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Last name</span><input name="last_name" required="required" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Email</span><input name="email" type="email" required="" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Email</span><input name="email" type="email" required="required" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
           <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Agency name <span style="color: #A88E7C; font-weight: 500;">(optional)</span></span><input name="organization_name" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
         <button type="submit" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 14px 30px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 24px rgba(191,32,111,0.28);">Get instant access</button>
@@ -458,10 +458,10 @@
               <div style="font-weight: 800; font-size: 15.5px; margin-bottom: 4px; text-align: center;">Want a copy? We’ll email your results.</div>
               <div style="font-size: 13.5px; color: #6E5560; margin-bottom: 16px; text-align: center;">Your answers, score, and recommended next steps — straight to your inbox.</div>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-                <input name="leadfirst" required="" placeholder="First name" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff;">
-                <input name="leadlast" required="" placeholder="Last name" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff;">
+                <input name="leadfirst" required="required" placeholder="First name" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff;">
+                <input name="leadlast" required="required" placeholder="Last name" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff;">
               </div>
-              <input name="leademail" type="email" required="" placeholder="Email address" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff; margin-bottom: 12px;">
+              <input name="leademail" type="email" required="required" placeholder="Email address" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff; margin-bottom: 12px;">
               <button type="submit" style="width: 100%; background: #BF206F; color: #fff; border: none; border-radius: 11px; padding: 13px; font-weight: 800; font-size: 15px; cursor: pointer;">Email me my results</button>
             </form>
           </sc-if>
@@ -503,9 +503,9 @@
         <sc-if value="{{ agencyLeadNotSent }}" hint-placeholder-val="{{ true }}">
           <form onSubmit="{{ submitAgencyLead }}" style="margin-top: 22px; padding-top: 22px; border-top: 1px solid #EADBCB; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
             <div style="font-size: 15px; font-weight: 700; color: #331A24; margin-right: 4px; width: 100%;">Email me this audit:</div>
-            <input name="leadfirst" required="" placeholder="First name" style="flex: 1; min-width: 120px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
-            <input name="leadlast" required="" placeholder="Last name" style="flex: 1; min-width: 120px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
-            <input name="leademail" type="email" required="" placeholder="Email address" style="flex: 1; min-width: 150px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
+            <input name="leadfirst" required="required" placeholder="First name" style="flex: 1; min-width: 120px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
+            <input name="leadlast" required="required" placeholder="Last name" style="flex: 1; min-width: 120px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
+            <input name="leademail" type="email" required="required" placeholder="Email address" style="flex: 1; min-width: 150px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
             <input name="leadorg" placeholder="Agency name (optional)" style="flex: 1; min-width: 150px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
             <button type="submit" style="background: #E86D0A; color: #fff; border: none; border-radius: 11px; padding: 11px 22px; font-weight: 800; font-size: 15px; cursor: pointer; white-space: nowrap;">Send results</button>
           </form>
@@ -547,14 +547,14 @@
       </div>
       <form onSubmit="{{ submitContact }}" style="background: #fff; border: 1px solid #EADBCB; border-radius: 22px; padding: 36px;">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">First name</span><input name="first_name" required="" defaultValue="{{ contactPrefillFirstName }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Last name</span><input name="last_name" required="" defaultValue="{{ contactPrefillLastName }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">First name</span><input name="first_name" required="required" defaultValue="{{ contactPrefillFirstName }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Last name</span><input name="last_name" required="required" defaultValue="{{ contactPrefillLastName }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
-          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Email</span><input name="email" type="email" required="" defaultValue="{{ contactPrefillEmail }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
+          <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Email</span><input name="email" type="email" required="required" defaultValue="{{ contactPrefillEmail }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
           <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Organization <span style="color: #A88E7C; font-weight: 500;">(optional)</span></span><input name="organization_name" defaultValue="{{ contactPrefillOrg }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
-        <label style="display: block; margin-bottom: 24px;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">How can we help?</span><textarea name="message" required="" rows="4" defaultValue="{{ contactPrefillMessage }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5; resize: vertical;"></textarea></label>
+        <label style="display: block; margin-bottom: 24px;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">How can we help?</span><textarea name="message" required="required" rows="4" defaultValue="{{ contactPrefillMessage }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5; resize: vertical;"></textarea></label>
         <button type="submit" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 14px 30px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 24px rgba(191,32,111,0.28);">Send message</button>
       </form>
     </sc-if>
@@ -1009,6 +1009,7 @@ class Component extends DCLogic {
       submitWebinar: (e) => {
         e.preventDefault();
         const el = e.target.elements;
+        if (!el.first_name.value.trim() || !el.last_name.value.trim() || !el.email.value.trim()) return;
         this.sendLead('webinar', {
           first_name: el.first_name.value,
           last_name: el.last_name.value,
@@ -1051,6 +1052,7 @@ class Component extends DCLogic {
       submitIndividualLead: (e) => {
         e.preventDefault();
         const el = e.target.elements;
+        if (!el.leadfirst.value.trim() || !el.leadlast.value.trim() || !el.leademail.value.trim()) return;
         const answers = { assessment_result: res.badge, recommendation: res.title };
         this.quizQuestions.forEach((q, i) => {
           answers[q.key] = s.quizAnswers[i] !== undefined ? q.options[s.quizAnswers[i]].label : 'no answer';
@@ -1072,6 +1074,7 @@ class Component extends DCLogic {
       submitAgencyLead: (e) => {
         e.preventDefault();
         const el = e.target.elements;
+        if (!el.leadfirst.value.trim() || !el.leadlast.value.trim() || !el.leademail.value.trim()) return;
         const answers = { compliance_score: pct + '%', compliance_band: scoreLabel };
         this.auditItems.forEach((item, i) => { answers[item.slug] = s.audit[i] ? 'yes' : 'no'; });
         this.sendLead('quiz', {
@@ -1095,6 +1098,7 @@ class Component extends DCLogic {
       submitContact: (e) => {
         e.preventDefault();
         const el = e.target.elements;
+        if (!el.first_name.value.trim() || !el.last_name.value.trim() || !el.email.value.trim() || !el.message.value.trim()) return;
         this.sendLead('contact', {
           first_name: el.first_name.value,
           last_name: el.last_name.value,
