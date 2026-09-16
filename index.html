@@ -685,11 +685,19 @@ class Component extends DCLogic {
       message: '[Webinar Q&A \u2014 ' + topic + '] ' + q,
     });
     try {
-      const reply = await window.claude.complete({
-        system: this.chatSystemPrompt(),
-        messages: history.map((m) => ({ role: m.role, content: m.text })),
-        max_tokens: 600,
+      const base = ((this.props && this.props.apiBaseUrl) || '').replace(/\/+$/, '');
+      if (!base) throw new Error('no apiBaseUrl configured');
+      const res = await fetch(base + '/api/v1/public/webinar-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system: this.chatSystemPrompt(),
+          messages: history.map((m) => ({ role: m.role, content: m.text })),
+        }),
       });
+      if (!res.ok) throw new Error('webinar-chat request failed: ' + res.status);
+      const data = await res.json();
+      const reply = data && data.reply;
       this.setState({ chat: this.state.chat.concat([{ role: 'assistant', text: (reply || '').trim() || 'Sorry, I didn\u2019t catch that \u2014 could you rephrase?' }]), chatBusy: false });
     } catch (e) {
       this.setState({ chat: this.state.chat.concat([{ role: 'assistant', text: 'Something went wrong reaching the assistant. Please try again, or use the contact form for a person.' }]), chatBusy: false });

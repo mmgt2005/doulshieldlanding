@@ -92,16 +92,41 @@ After registering, the visitor lands on a "You're registered — Watch [session]
 with the recording embedded (16:9), driven by the per-track video URL props above. Access is
 immediate and unconditional (not gated on the API 201).
 
-**AI Q&A chat** sits below the video (replaces the live-host Q&A). It uses the built-in
-Claude helper (`window.claude.complete` — no API key/backend needed), grounded with a system
-prompt covering the 4-stage pipeline, DoulaShield's delegate model, and exact pricing.
-Answers are short and non-salesy; it defers to the contact form for human matters. Shared
-rate limit: 15 questions/min per viewer.
+**AI Q&A chat** sits below the video (replaces the live-host Q&A), grounded with a system
+prompt covering the 4-stage pipeline, DoulaShield's delegate model, and exact pricing
+(see `chatSystemPrompt()` in the logic class — edit the prompt text there, nowhere else).
+Answers are short and non-salesy; it defers to the contact form for human matters.
+
+**Requires a backend endpoint — this was broken on the deployed site until fixed.** The
+page previously called `window.claude.complete(...)`, a bridge that only exists inside the
+Claude Design Canvas editor tool itself; every deployed visitor hit an error ("Something
+went wrong reaching the assistant") on every question. The frontend now POSTs to
+`{apiBaseUrl}/api/v1/public/webinar-chat`:
+
+```
+POST {apiBaseUrl}/api/v1/public/webinar-chat
+Content-Type: application/json
+
+{ "system": "<the system prompt string>", "messages": [{ "role": "user"|"assistant", "content": "..." }, ...] }
+```
+
+Expected response: `200 OK` with `{ "reply": "<assistant's reply text>" }`. On any non-2xx
+response, network error, or missing `apiBaseUrl`, the page shows a fallback message and
+points the visitor to the contact form.
+
+**This endpoint needs to be built on the Railway backend** (not in this repo) — it should
+proxy `system`/`messages` to an LLM API (e.g. Anthropic's Messages API) server-side and
+return `{ reply }`. **Never call an LLM API directly from the browser with an API key** —
+that exposes the key to every visitor. Same CORS requirement as the leads endpoints
+(`CORS_EXTRA_ORIGINS`). Consider the same per-IP rate limit as leads, plus a per-viewer cap
+on chat turns to control LLM cost (previously documented as "15 questions/min per viewer"
+as a UX-level target; not yet enforced anywhere).
 
 **Chat questions are logged to the API.** Registrant details (first/last/email/org) are
 captured at webinar submit and stored in state; each question is POSTed to
 `/api/v1/public/leads/contact` (fire-and-forget) with `message` = `"[Webinar Q&A — <session title>] <question>"`.
-So every question a viewer asks becomes a contact lead attributed to the registrant.
+So every question a viewer asks becomes a contact lead attributed to the registrant — this
+part already worked and is unrelated to the chat-reply bug above.
 
 ---
 
