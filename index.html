@@ -320,12 +320,20 @@
           <div style="width: 40px; height: 40px; border-radius: 50%; background: #FBEAF1; color: #BF206F; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">✓</div>
           <div style="font-weight: 800; font-size: 13px; letter-spacing: 0.05em; text-transform: uppercase; color: #BF206F;">You’re registered, {{ webinarName }}</div>
         </div>
-        <h2 style="font-family: 'Newsreader', serif; font-weight: 500; font-size: 32px; margin: 0 0 6px;">Watch the {{ selectedWebinarTitle }} now</h2>
+        <h2 style="font-family: 'Newsreader', serif; font-weight: 500; font-size: 32px; margin: 0 0 6px;">{{ watchHeading }}</h2>
         <p style="font-size: 16px; color: #6E5560; line-height: 1.55; margin: 0 0 24px; max-width: 44em;">Your access is ready below — start whenever you like. We’ve also emailed you a <strong>Watch&nbsp;Now</strong> link so you can come back anytime.</p>
+
+        <sc-if value="{{ hasMultipleParts }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px;">
+            <sc-for list="{{ partPills }}" as="pp" hint-placeholder-count="3">
+              <button onClick="{{ pp.onClick }}" style="{{ pp.style }}">{{ pp.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
 
         <sc-if value="{{ hasWebinarVideo }}" hint-placeholder-val="{{ false }}">
           <div style="position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 16px; overflow: hidden; background: #000; border: 1px solid #EADBCB;">
-            <iframe src="{{ webinarVideoEmbedUrl }}" title="{{ selectedWebinarTitle }}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen="" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
+            <iframe src="{{ webinarVideoEmbedUrl }}" title="{{ watchHeading }}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen="" style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"></iframe>
           </div>
         </sc-if>
         <sc-if value="{{ noWebinarVideo }}" hint-placeholder-val="{{ true }}">
@@ -367,7 +375,13 @@
           </div>
         </div>
 
-        <div style="display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap;">
+        <sc-if value="{{ hasMultipleParts }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 26px;">
+            <button onClick="{{ nextPart }}" style="{{ nextPartStyle }}">Next part →</button>
+          </div>
+        </sc-if>
+
+        <div style="display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
           <button onClick="{{ bookSetupCall }}" style="background: #F88017; color: #fff; border: none; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer; box-shadow: 0 10px 24px rgba(248,128,23,0.28);">Book a setup call</button>
           <button onClick="{{ goQuizFromWebinar }}" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;">Take the free quiz next</button>
           <button onClick="{{ goHome }}" style="background: #fff; color: #331A24; border: 1.5px solid #EADBCB; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;">Back to home</button>
@@ -580,12 +594,13 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarVideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarVideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart3VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
 class Component extends DCLogic {
   state = {
     view: 'home',
     // webinar
     selectedWebinar: 0,
+    selectedPart: 1,
     webinarSubmitted: false,
     webinarName: '',
     // quiz
@@ -610,6 +625,7 @@ class Component extends DCLogic {
     // webinar engagement timestamps (ISO strings), attached to whichever lead follows
     webinarReachedAt: null,
     webinarCtaClickedAt: null,
+    webinarPartAtCtaClick: null,
   };
 
   howItWorks = [
@@ -676,7 +692,10 @@ class Component extends DCLogic {
     this.setState({ chat: history, chatInput: '', chatBusy: true });
     // Log the question to the DoulaShield API as a contact lead (fire-and-forget).
     const reg = this.state.reg || {};
-    const topic = this.webinarData[this.state.selectedWebinar].title;
+    const activePart = this.activeWebinarPart();
+    const topic = activePart.totalParts > 1
+      ? activePart.track.title + ' — ' + (activePart.part ? activePart.part.label : '')
+      : activePart.track.title;
     this.sendLead('contact', {
       first_name: reg.first_name || 'Webinar',
       last_name: reg.last_name || 'Viewer',
@@ -714,6 +733,17 @@ class Component extends DCLogic {
       if ((m = url.match(/loom\.com\/(?:share|embed)\/([\w-]+)/))) return 'https://www.loom.com/embed/' + m[1] + '?autoplay=1';
       return url; // assume it is already an embeddable URL
     } catch (e) { return url; }
+  }
+
+  // Resolves the currently selected webinar track + part, clamping the part index into
+  // range (handles a bad deep link or leftover state from switching tracks). Shared by
+  // renderVals() and sendChatMessage() so the clamp logic can't drift between the two.
+  activeWebinarPart() {
+    const track = this.webinarData[this.state.selectedWebinar];
+    const parts = track.parts || [];
+    const clamped = Math.min(Math.max(this.state.selectedPart || 1, 1), parts.length || 1);
+    const part = parts[clamped - 1] || null;
+    return { track, parts, totalParts: parts.length, partNum: clamped, part };
   }
 
   // POST a lead to a DoulaShield public leads endpoint. kind: 'quiz' | 'webinar' | 'contact'.
@@ -765,8 +795,17 @@ class Component extends DCLogic {
     { icon: '\u23F0', title: 'Expiry reminders', desc: 'Automated email reminders for NPI, CAQH, PROMISe\u2122, and PCB certification renewals.' },
   ];
   webinarData = [
-    { tag: 'For individuals', title: 'Individual Provider Webinar', desc: 'From PCB certification to your first paid PA Medicaid claim \u2014 the whole path, walked through.', when: '45 min \u00B7 watch instantly', accent: '#BF206F' },
-    { tag: 'For agencies', title: 'Agency Webinar', desc: 'Group NPI setup, billing-admin workflows, and per-seat management for multi-provider teams.', when: '45 min \u00B7 watch instantly', accent: '#E86D0A' },
+    { tag: 'For individuals', title: 'Individual Provider Webinar', desc: 'From PCB certification to your first paid PA Medicaid claim \u2014 the whole path, walked through.', when: '45 min \u00B7 watch instantly', accent: '#BF206F',
+      parts: [
+        { num: 1, label: 'Part 1', videoProp: 'individualWebinarPart1VideoUrl' },
+        { num: 2, label: 'Part 2', videoProp: 'individualWebinarPart2VideoUrl' },
+        { num: 3, label: 'Part 3', videoProp: 'individualWebinarPart3VideoUrl' },
+      ] },
+    { tag: 'For agencies', title: 'Agency Webinar', desc: 'Group NPI setup, billing-admin workflows, and per-seat management for multi-provider teams.', when: '45 min \u00B7 watch instantly', accent: '#E86D0A',
+      parts: [
+        { num: 1, label: 'Part 1', videoProp: 'agencyWebinarPart1VideoUrl' },
+        { num: 2, label: 'Part 2', videoProp: 'agencyWebinarPart2VideoUrl' },
+      ] },
   ];
   quizQuestions = [
     { key: 'pcb_certification', q: 'Do you hold a current PCB doula certification?', options: [
@@ -823,8 +862,15 @@ class Component extends DCLogic {
   applyHash() {
     const h = (window.location.hash || '').replace(/^#/, '').toLowerCase();
     if (!h || h === 'home') { this.setState({ view: 'home' }); return; }
-    if (h === 'webinar' || h === 'webinar-individual') { this.setState({ view: 'webinar', selectedWebinar: 0 }); return; }
-    if (h === 'webinar-agency') { this.setState({ view: 'webinar', selectedWebinar: 1 }); return; }
+    const webinarMatch = h.match(/^webinar(?:-(individual|agency))?(?:-part(\d+))?$/);
+    if (webinarMatch) {
+      const trackIndex = webinarMatch[1] === 'agency' ? 1 : 0;
+      const parts = this.webinarData[trackIndex].parts || [];
+      const requestedPart = webinarMatch[2] ? parseInt(webinarMatch[2], 10) : 1;
+      const clampedPart = Math.min(Math.max(requestedPart, 1), parts.length || 1);
+      this.setState({ view: 'webinar', selectedWebinar: trackIndex, selectedPart: clampedPart });
+      return;
+    }
     if (h === 'quiz' || h === 'quiz-individual') { this.setState({ view: 'quiz', quizTab: 'individual' }); return; }
     if (h === 'quiz-agency') { this.setState({ view: 'quiz', quizTab: 'agency' }); return; }
     if (h === 'contact') { this.setState({ view: 'contact' }); return; }
@@ -844,12 +890,27 @@ class Component extends DCLogic {
     // ---- webinar ----
     const webinars = this.webinarData.map((w, i) => ({
       ...w,
-      onSelect: () => this.setState({ selectedWebinar: i }),
+      onSelect: () => this.setState({ selectedWebinar: i, selectedPart: 1 }),
       cardStyle: `cursor: pointer; border-radius: 20px; padding: 28px; transition: all .15s; background: ${s.selectedWebinar === i ? '#fff' : '#FBF1E6'}; border: 2px solid ${s.selectedWebinar === i ? w.accent : '#EADBCB'}; box-shadow: ${s.selectedWebinar === i ? '0 16px 34px -18px rgba(51,26,36,0.4)' : 'none'};`,
     }));
     const selectedWebinarTitle = this.webinarData[s.selectedWebinar].title;
     const p = this.props || {};
-    const rawVideoUrl = ((s.selectedWebinar === 1 ? p.agencyWebinarVideoUrl : p.individualWebinarVideoUrl) || '').trim();
+    const activePart = this.activeWebinarPart();
+    const hasMultipleParts = activePart.totalParts > 1;
+    const isLastPart = activePart.partNum >= activePart.totalParts;
+    const watchHeading = hasMultipleParts && activePart.part
+      ? 'Watch ' + activePart.part.label + ' now'
+      : 'Watch the ' + selectedWebinarTitle + ' now';
+    const partPills = activePart.parts.map((pt) => ({
+      label: pt.label,
+      onClick: () => this.setState({ selectedPart: pt.num }),
+      style: `cursor: pointer; border-radius: 999px; padding: 8px 16px; font-size: 13.5px; font-weight: 700; border: 1.5px solid ${pt.num === activePart.partNum ? activePart.track.accent : '#EADBCB'}; background: ${pt.num === activePart.partNum ? activePart.track.accent : '#fff'}; color: ${pt.num === activePart.partNum ? '#fff' : '#6E5560'};`,
+    }));
+    const nextPart = () => { if (!isLastPart) this.setState({ selectedPart: activePart.partNum + 1 }); };
+    const nextPartStyle = isLastPart
+      ? 'background: #fff; color: #331A24; border: 1.5px solid #EADBCB; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; opacity: 0; pointer-events: none;'
+      : 'background: #fff; color: #331A24; border: 1.5px solid #EADBCB; border-radius: 999px; padding: 13px 26px; font-weight: 800; font-size: 15px; cursor: pointer;';
+    const rawVideoUrl = ((activePart.part && p[activePart.part.videoProp]) || '').trim();
     const webinarVideoEmbedUrl = this.webinarEmbedUrl(rawVideoUrl);
 
     // ---- individual quiz ----
@@ -907,7 +968,7 @@ class Component extends DCLogic {
       // nav
       goHome: () => this.go('home', 'home'), goWebinar: () => this.go('webinar', 'webinar'),
       goQuiz: () => this.go('quiz', 'quiz'), goContact: () => this.go('contact', 'contact'),
-      registerAgencyWebinar: () => { this.setState({ selectedWebinar: 1 }); this.go('webinar', 'webinar-agency'); },
+      registerAgencyWebinar: () => { this.setState({ selectedWebinar: 1, selectedPart: 1 }); this.go('webinar', 'webinar-agency'); },
       isHome: s.view === 'home', isWebinar: s.view === 'webinar',
       isQuiz: s.view === 'quiz', isContact: s.view === 'contact',
       // home content
@@ -984,26 +1045,32 @@ class Component extends DCLogic {
         logoStyle: m.logo ? ("background-image: url('" + m.logo + "'); background-size: contain; background-repeat: no-repeat; background-position: center; height: 26px; width: 150px;") : 'display:none;',
       })),
       // webinar
-      webinars, selectedWebinarTitle,
+      webinars, selectedWebinarTitle, watchHeading,
       webinarSubmitted: s.webinarSubmitted, webinarNotSubmitted: !s.webinarSubmitted,
       webinarName: s.webinarName,
       webinarVideoEmbedUrl, hasWebinarVideo: !!webinarVideoEmbedUrl, noWebinarVideo: !webinarVideoEmbedUrl,
+      hasMultipleParts, partPills, nextPart, nextPartStyle,
       bookSetupCall: () => {
         const reg = s.reg || {};
+        const partNote = hasMultipleParts && activePart.part ? ' (' + activePart.part.label + ')' : '';
         this.setState({
           contactPrefill: {
             first_name: reg.first_name || '', last_name: reg.last_name || '',
             email: reg.email || '', organization_name: reg.organization_name || '',
-            message: 'I just watched the ' + selectedWebinarTitle + ' and would like to book a setup call to get started with DoulaShield.',
+            message: 'I just watched the ' + selectedWebinarTitle + partNote + ' and would like to book a setup call to get started with DoulaShield.',
           },
           webinarCtaClickedAt: new Date().toISOString(),
+          webinarPartAtCtaClick: activePart.part ? activePart.part.label : null,
         });
         this.go('contact', 'contact');
       },
       // "Take the free quiz next" from the webinar success panel specifically — distinct
       // from the generic goQuiz (nav/hero/footer) so only this path stamps the CTA click time.
       goQuizFromWebinar: () => {
-        this.setState({ webinarCtaClickedAt: new Date().toISOString() });
+        this.setState({
+          webinarCtaClickedAt: new Date().toISOString(),
+          webinarPartAtCtaClick: activePart.part ? activePart.part.label : null,
+        });
         this.go('quiz', 'quiz');
       },
       // Q&A chat
@@ -1039,8 +1106,12 @@ class Component extends DCLogic {
           webinarSubmitted: true,
           webinarName: el.first_name.value,
           reg: { first_name: el.first_name.value, last_name: el.last_name.value, email: el.email.value, organization_name: el.organization_name.value },
+          // selectedPart intentionally left as-is: defaults to 1 on a fresh visit, but a
+          // direct #webinar-...-partN deep link should survive through registration
+          // rather than being forced back to Part 1.
           webinarReachedAt: new Date().toISOString(),
           webinarCtaClickedAt: null,
+          webinarPartAtCtaClick: null,
         });
         if (typeof window !== 'undefined') window.scrollTo(0, 0);
       },
@@ -1085,6 +1156,7 @@ class Component extends DCLogic {
           answers,
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
+          webinar_part_at_cta: s.webinarPartAtCtaClick,
         });
         this.setState({ indLeadSent: true, indLeadEmail: el.leademail.value });
       },
@@ -1108,6 +1180,7 @@ class Component extends DCLogic {
           answers,
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
+          webinar_part_at_cta: s.webinarPartAtCtaClick,
         });
         this.setState({ agencyLeadSent: true, agencyLeadEmail: el.leademail.value });
       },
@@ -1131,6 +1204,7 @@ class Component extends DCLogic {
           message: el.message.value,
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
+          webinar_part_at_cta: s.webinarPartAtCtaClick,
         });
         this.setState({ contactSubmitted: true, contactName: el.first_name.value });
         if (typeof window !== 'undefined') window.scrollTo(0, 0);

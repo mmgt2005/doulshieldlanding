@@ -28,12 +28,21 @@ Warm/maternal treatment, cream background `#FBF5ED`, Newsreader (serif) + Mulish
 | Prop | Section | Purpose |
 |------|---------|---------|
 | `apiBaseUrl` | Integrations | Base URL of the DoulaShield API, e.g. `https://api.doulashield.com`. Blank = prototype mode (payloads logged to console only, no network call). |
-| `individualWebinarVideoUrl` | Webinar videos | Share/embed URL for the Individual Provider recording. |
-| `agencyWebinarVideoUrl` | Webinar videos | Share/embed URL for the Agency recording. |
+| `individualWebinarPart1VideoUrl` … `Part3VideoUrl` | Webinar videos | Share/embed URL for each part of the Individual Provider series (3 parts). |
+| `agencyWebinarPart1VideoUrl` … `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Agency series (2 parts). |
 
 Video URLs accept YouTube / Vimeo / Loom **share** links (or a raw embed URL) — the page
-auto-converts them to an autoplaying embed for the matching track. Until set, a labeled
+auto-converts them to an autoplaying embed for the matching part. Until set, a labeled
 placeholder shows.
+
+**Each track is a series of parts**, not one video — see `webinarData` in the logic class
+(search for `parts:`). Part *count* and *labels* are a code edit (hardcoded in
+`webinarData`, same as `title`/`desc`/`tag`); only the video URL per part is Tweaks-editable.
+Tracks can have different part counts (Individual and Agency aren't required to match). To
+add or remove a part: add/remove both the `webinarData[i].parts` entry **and** its matching
+`{track}WebinarPart{N}VideoUrl` Tweaks prop together — they're tied by the `videoProp`
+string on each part object, so a mismatch silently shows the empty-video placeholder rather
+than erroring.
 
 ---
 
@@ -53,10 +62,11 @@ Empty optional fields are stripped client-side before sending.
 
 **Webinar engagement timestamps:** if a visitor registered for a webinar earlier in the
 session, the `/quiz` and `/contact` payloads above also carry `webinar_reached_at` (ISO
-timestamp — when the webinar video/success view first appeared) and
-`webinar_cta_clicked_at` (ISO timestamp — when they clicked "Book a setup call" or "Take
-the free quiz next" from that panel). Backend can diff the two for elapsed watch time.
-Both are `null`/omitted for leads that didn't come through the webinar flow. This is a
+timestamp — when the webinar video/success view first appeared), `webinar_cta_clicked_at`
+(ISO timestamp — when they clicked "Book a setup call" or "Take the free quiz next" from
+that panel), and `webinar_part_at_cta` (which part's label, e.g. `"Part 2"`, they were on
+when they clicked). Backend can diff the two timestamps for elapsed watch time. All three
+are `null`/omitted for leads that didn't come through the webinar flow. This is a
 time-on-page approximation, not proof the video was actually watched — the page doesn't
 integrate any video-provider SDK to detect real playback/completion (embeds can be
 YouTube, Vimeo, or Loom depending on what's set in Tweaks, so there's no single generic
@@ -89,8 +99,16 @@ The webinars are framed as **on-demand** (not live): no scheduled times, no live
 reads "Free on-demand webinar," "45 min · watch instantly," CTA "Get instant access."
 
 After registering, the visitor lands on a "You're registered — Watch [session] now" panel
-with the recording embedded (16:9), driven by the per-track video URL props above. Access is
+with the recording embedded (16:9), driven by the per-part video URL props above. Access is
 immediate and unconditional (not gated on the API 201).
+
+**Each track can be a multi-part series.** If a track has more than one part (see
+`webinarData` above), a pill row ("Part 1 / Part 2 / ...") appears above the video so the
+visitor can jump between parts freely, plus a "Next part →" button for convenience (fades
+out on the last part). Registration is a one-time, track-level action — it is **not**
+re-gated per part, and there's no enforced watch order; all parts are open immediately
+after the single registration. A track with only one part shows no pill row at all (falls
+back to the original single-video layout).
 
 **AI Q&A chat** sits below the video (replaces the live-host Q&A), grounded with a system
 prompt covering the 4-stage pipeline, DoulaShield's delegate model, and exact pricing
@@ -124,9 +142,11 @@ as a UX-level target; not yet enforced anywhere).
 
 **Chat questions are logged to the API.** Registrant details (first/last/email/org) are
 captured at webinar submit and stored in state; each question is POSTed to
-`/api/v1/public/leads/contact` (fire-and-forget) with `message` = `"[Webinar Q&A — <session title>] <question>"`.
-So every question a viewer asks becomes a contact lead attributed to the registrant — this
-part already worked and is unrelated to the chat-reply bug above.
+`/api/v1/public/leads/contact` (fire-and-forget) with `message` = `"[Webinar Q&A — <session title>] <question>"`
+— or `"[Webinar Q&A — <session title> — <part label>] <question>"` when the track has more
+than one part, so the logged lead shows which part prompted the question. So every question
+a viewer asks becomes a contact lead attributed to the registrant — this part already
+worked and is unrelated to the chat-reply bug above.
 
 ---
 
@@ -136,15 +156,19 @@ Append to the deployed page URL (the `#` matters; hash routing works on any stat
 
 | Link | Lands on |
 |------|----------|
-| `#webinar` or `#webinar-individual` | Webinar page, Individual track selected |
-| `#webinar-agency` | Webinar page, Agency track selected |
+| `#webinar` or `#webinar-individual` | Webinar page, Individual track, Part 1 |
+| `#webinar-agency` | Webinar page, Agency track, Part 1 |
+| `#webinar-individual-partN` | Webinar page, Individual track, Part N |
+| `#webinar-agency-partN` | Webinar page, Agency track, Part N |
 | `#quiz` or `#quiz-individual` | Quiz, individual self-assessment tab |
 | `#quiz-agency` | Quiz, agency audit tab |
 | `#contact` | Contact form |
 | `#home` or bare URL | Home |
 
 The hash is read on load and updates live in the address bar as visitors navigate. Unknown
-hash → falls back to home. Case-insensitive.
+hash → falls back to home. Case-insensitive. A part-link still requires registering first
+(it only pre-selects which part shows once they do); an out-of-range part number (e.g.
+`-part9` on a 3-part track) clamps to that track's last valid part instead of erroring.
 
 ---
 
@@ -171,11 +195,17 @@ hash → falls back to home. Case-insensitive.
    sessions again.
 3. **Prospect confirmation email:** see CORS/email section — backend needs a Resend email to
    the prospect, or soften the page's "we'll email you" copy.
-4. **Webinar video URLs** must be set in Tweaks (individual + agency) or a placeholder shows.
-5. **Hero image** is a drag-and-drop `<image-slot id="ds-hero">` — the user drops their own
+4. **Webinar video URLs** must be set in Tweaks (one per part per track) or a placeholder
+   shows for that part. Currently all are blank.
+5. **Part count is a code+Tweaks pair.** If a track's part count changes later, add/remove
+   both the `webinarData[i].parts` entry and its matching Tweaks prop together — see the
+   "Configurable settings" section above. They're linked only by the `videoProp` string on
+   each part object, so a typo there silently shows the empty-video placeholder rather than
+   erroring loudly.
+6. **Hero image** is a drag-and-drop `<image-slot id="ds-hero">` — the user drops their own
    warm/diverse hero photo onto it and it persists. No stock photo is bundled (can't ship a
    licensed one).
-6. **MCO logos as social proof** — ADDED as a muted strip below the hero ("Claims routed to
+7. **MCO logos as social proof** — ADDED as a muted strip below the hero ("Claims routed to
    every PA Medicaid MCO") with **placeholder** wordmarks + a trademark disclaimer. Swap in
    real logo files when available (see note below); the MCO list lives in the `mcos` array in
    the logic class.
