@@ -31,9 +31,15 @@ Warm/maternal treatment, cream background `#FBF5ED`, Newsreader (serif) + Mulish
 | `individualWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Individual Provider series (2 parts). |
 | `agencyWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Agency series (2 parts). |
 
-Video URLs accept YouTube / Vimeo / Loom **share** links (or a raw embed URL) — the page
-auto-converts them to an autoplaying embed for the matching part. Until set, a labeled
-placeholder shows.
+Video URLs accept YouTube / Vimeo / Loom / **Google Drive** share links (or a raw embed
+URL) — the page auto-converts them to an embeddable iframe `src` for the matching part
+(autoplaying for YouTube/Vimeo/Loom; Drive doesn't support an autoplay param, so Drive
+embeds start paused). A Drive share link (`drive.google.com/file/d/<id>/view?usp=sharing`)
+converts to `drive.google.com/file/d/<id>/preview` — the raw `/view` link does **not**
+embed. **The Drive file's sharing setting must be "Anyone with the link can view"**, or
+visitors will see an access-denied page inside the iframe instead of the video — this
+can't be verified from the code, check it manually after publishing a Drive link. Until a
+part's video URL is set, a labeled placeholder shows for that part.
 
 **Each track is a series of parts**, not one video — see `webinarData` in the logic class
 (search for `parts:`). Part *count* and *labels* are a code edit (hardcoded in
