@@ -28,8 +28,8 @@ Warm/maternal treatment, cream background `#FBF5ED`, Newsreader (serif) + Mulish
 | Prop | Section | Purpose |
 |------|---------|---------|
 | `apiBaseUrl` | Integrations | Base URL of the DoulaShield API, e.g. `https://api.doulashield.com`. Blank = prototype mode (payloads logged to console only, no network call). |
-| `individualWebinarPart1VideoUrl` … `Part3VideoUrl` | Webinar videos | Share/embed URL for each part of the Individual Provider series (3 parts). |
-| `agencyWebinarPart1VideoUrl` … `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Agency series (2 parts). |
+| `individualWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Individual Provider series (2 parts). |
+| `agencyWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Agency series (2 parts). |
 
 Video URLs accept YouTube / Vimeo / Loom **share** links (or a raw embed URL) — the page
 auto-converts them to an autoplaying embed for the matching part. Until set, a labeled

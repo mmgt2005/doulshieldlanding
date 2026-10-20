@@ -594,7 +594,7 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart3VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
 class Component extends DCLogic {
   state = {
     view: 'home',
@@ -797,14 +797,13 @@ class Component extends DCLogic {
   webinarData = [
     { tag: 'For individuals', title: 'Individual Provider Webinar', desc: 'From PCB certification to your first paid PA Medicaid claim \u2014 the whole path, walked through.', when: '45 min \u00B7 watch instantly', accent: '#BF206F',
       parts: [
-        { num: 1, label: 'Part 1', videoProp: 'individualWebinarPart1VideoUrl' },
-        { num: 2, label: 'Part 2', videoProp: 'individualWebinarPart2VideoUrl' },
-        { num: 3, label: 'Part 3', videoProp: 'individualWebinarPart3VideoUrl' },
+        { num: 1, label: 'From Credentialing to Your First Paid Claim', videoProp: 'individualWebinarPart1VideoUrl' },
+        { num: 2, label: 'Staying Compliant: Audits & Renewals', videoProp: 'individualWebinarPart2VideoUrl' },
       ] },
     { tag: 'For agencies', title: 'Agency Webinar', desc: 'Group NPI setup, billing-admin workflows, and per-seat management for multi-provider teams.', when: '45 min \u00B7 watch instantly', accent: '#E86D0A',
       parts: [
-        { num: 1, label: 'Part 1', videoProp: 'agencyWebinarPart1VideoUrl' },
-        { num: 2, label: 'Part 2', videoProp: 'agencyWebinarPart2VideoUrl' },
+        { num: 1, label: 'Getting Your Team Credentialed', videoProp: 'agencyWebinarPart1VideoUrl' },
+        { num: 2, label: 'Running Billing Across Your Team', videoProp: 'agencyWebinarPart2VideoUrl' },
       ] },
   ];
   quizQuestions = [
