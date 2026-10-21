@@ -42,6 +42,7 @@
   }
 </style>
 <script src="image-slot.js"></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileApi&render=explicit" async defer></script>
 </helmet>
 <div style="font-family: 'Mulish', sans-serif; color: #331A24; background: #FBF5ED; min-height: 100vh; -webkit-font-smoothing: antialiased;">
 
@@ -414,6 +415,7 @@
           <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Email</span><input name="email" type="email" required="required" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
           <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Agency name <span style="color: #A88E7C; font-weight: 500;">(optional)</span></span><input name="organization_name" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
+        <div id="turnstile-webinar" style="margin-bottom: 16px;"></div>
         <button type="submit" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 14px 30px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 24px rgba(191,32,111,0.28);">Get instant access</button>
       </form>
     </sc-if>
@@ -476,6 +478,7 @@
                 <input name="leadlast" required="required" placeholder="Last name" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff;">
               </div>
               <input name="leademail" type="email" required="required" placeholder="Email address" style="width: 100%; border: 1.5px solid #EAD0DC; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #fff; margin-bottom: 12px;">
+              <div id="turnstile-ind-quiz" style="margin-bottom: 12px;"></div>
               <button type="submit" style="width: 100%; background: #BF206F; color: #fff; border: none; border-radius: 11px; padding: 13px; font-weight: 800; font-size: 15px; cursor: pointer;">Email me my results</button>
             </form>
           </sc-if>
@@ -521,6 +524,7 @@
             <input name="leadlast" required="required" placeholder="Last name" style="flex: 1; min-width: 120px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
             <input name="leademail" type="email" required="required" placeholder="Email address" style="flex: 1; min-width: 150px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
             <input name="leadorg" placeholder="Agency name (optional)" style="flex: 1; min-width: 150px; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 11px 14px; font-size: 15px; background: #FBF9F5;">
+            <div id="turnstile-agency-quiz" style="flex: 1 0 100%; margin-top: 4px;"></div>
             <button type="submit" style="background: #E86D0A; color: #fff; border: none; border-radius: 11px; padding: 11px 22px; font-weight: 800; font-size: 15px; cursor: pointer; white-space: nowrap;">Send results</button>
           </form>
         </sc-if>
@@ -569,6 +573,7 @@
           <label style="display: block;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">Organization <span style="color: #A88E7C; font-weight: 500;">(optional)</span></span><input name="organization_name" defaultValue="{{ contactPrefillOrg }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5;"></label>
         </div>
         <label style="display: block; margin-bottom: 24px;"><span style="display: block; font-weight: 700; font-size: 13.5px; margin-bottom: 6px; color: #6E5560;">How can we help?</span><textarea name="message" required="required" rows="4" defaultValue="{{ contactPrefillMessage }}" style="width: 100%; border: 1.5px solid #EADBCB; border-radius: 11px; padding: 12px 14px; font-size: 15px; background: #FBF9F5; resize: vertical;"></textarea></label>
+        <div id="turnstile-contact" style="margin-bottom: 16px;"></div>
         <button type="submit" style="background: #BF206F; color: #fff; border: none; border-radius: 999px; padding: 14px 30px; font-weight: 800; font-size: 16px; cursor: pointer; box-shadow: 0 10px 24px rgba(191,32,111,0.28);">Send message</button>
       </form>
     </sc-if>
@@ -594,7 +599,7 @@
 
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1E2RF29dETV2SimpmfdF_IMrBQAqX0AGu/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1xF1T2wQEzVCuHIiXHYxiKP52sgby__HW/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1Gh2ZInSb3MKQrV7KyhPW6tjvv57ydsKt/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:760},&quot;apiBaseUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://doulashield-production.up.railway.app&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;turnstileSiteKey&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Integrations&quot;},&quot;individualWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1E2RF29dETV2SimpmfdF_IMrBQAqX0AGu/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;individualWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1xF1T2wQEzVCuHIiXHYxiKP52sgby__HW/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart1VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;https://drive.google.com/file/d/1Gh2ZInSb3MKQrV7KyhPW6tjvv57ydsKt/view?usp=sharing&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;},&quot;agencyWebinarPart2VideoUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Webinar videos&quot;}}">
 class Component extends DCLogic {
   state = {
     view: 'home',
@@ -626,6 +631,8 @@ class Component extends DCLogic {
     webinarReachedAt: null,
     webinarCtaClickedAt: null,
     webinarPartAtCtaClick: null,
+    // Cloudflare Turnstile tokens, one per lead-capture form (bot protection)
+    turnstileTokens: { webinar: '', indQuiz: '', agencyQuiz: '', contact: '' },
   };
 
   howItWorks = [
@@ -768,6 +775,36 @@ class Component extends DCLogic {
     try { console.log('[DoulaShield lead:' + kind + ']', clean); } catch (e) {}
   }
 
+  // Cloudflare Turnstile (bot protection) — one widget per lead-capture form. Explicit
+  // render mode: each container is mounted/unmounted by its own <sc-if>, so widgets are
+  // (re-)rendered on demand rather than auto-rendering on script load. Token verification
+  // itself happens server-side (Railway, not this repo) — this only collects the token.
+  turnstileWidgets = [
+    { id: 'turnstile-webinar', key: 'webinar' },
+    { id: 'turnstile-ind-quiz', key: 'indQuiz' },
+    { id: 'turnstile-agency-quiz', key: 'agencyQuiz' },
+    { id: 'turnstile-contact', key: 'contact' },
+  ];
+  mountTurnstileWidgets() {
+    if (typeof window === 'undefined' || !window.turnstile) return;
+    const sitekey = ((this.props && this.props.turnstileSiteKey) || '').trim();
+    if (!sitekey) return;
+    this.turnstileWidgets.forEach(({ id, key }) => {
+      const el = document.getElementById(id);
+      if (!el || el.dataset.rendered) return;
+      el.dataset.rendered = 'true';
+      try {
+        window.turnstile.render(el, {
+          sitekey,
+          theme: 'light',
+          callback: (token) => this.setState((s) => ({ turnstileTokens: { ...s.turnstileTokens, [key]: token } })),
+          'expired-callback': () => this.setState((s) => ({ turnstileTokens: { ...s.turnstileTokens, [key]: '' } })),
+          'error-callback': () => this.setState((s) => ({ turnstileTokens: { ...s.turnstileTokens, [key]: '' } })),
+        });
+      } catch (e) { console.error('[DoulaShield turnstile]', id, e); }
+    });
+  }
+
   // ---- static content ----
   integrations = [
     { name: 'Stripe' }, { name: 'Availity' }, { name: 'USPS' },
@@ -855,6 +892,13 @@ class Component extends DCLogic {
     this.applyHash();
     this._onHash = () => this.applyHash();
     window.addEventListener('hashchange', this._onHash);
+    // Turnstile's script loads async; its onload= param fires this once window.turnstile
+    // is actually ready, independent of any other state change on the page.
+    window.onloadTurnstileApi = () => this.mountTurnstileWidgets();
+    this.mountTurnstileWidgets(); // covers the case the script already finished loading
+  }
+  componentDidUpdate() {
+    this.mountTurnstileWidgets();
   }
   componentWillUnmount() {
     if (typeof window !== 'undefined' && this._onHash) window.removeEventListener('hashchange', this._onHash);
@@ -1101,6 +1145,7 @@ class Component extends DCLogic {
           email: el.email.value,
           organization_name: el.organization_name.value,
           webinar_topic: selectedWebinarTitle,
+          turnstile_token: s.turnstileTokens.webinar,
         });
         this.setState({
           webinarSubmitted: true,
@@ -1157,6 +1202,7 @@ class Component extends DCLogic {
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
           webinar_part_at_cta: s.webinarPartAtCtaClick,
+          turnstile_token: s.turnstileTokens.indQuiz,
         });
         this.setState({ indLeadSent: true, indLeadEmail: el.leademail.value });
       },
@@ -1181,6 +1227,7 @@ class Component extends DCLogic {
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
           webinar_part_at_cta: s.webinarPartAtCtaClick,
+          turnstile_token: s.turnstileTokens.agencyQuiz,
         });
         this.setState({ agencyLeadSent: true, agencyLeadEmail: el.leademail.value });
       },
@@ -1205,6 +1252,7 @@ class Component extends DCLogic {
           webinar_reached_at: s.webinarReachedAt,
           webinar_cta_clicked_at: s.webinarCtaClickedAt,
           webinar_part_at_cta: s.webinarPartAtCtaClick,
+          turnstile_token: s.turnstileTokens.contact,
         });
         this.setState({ contactSubmitted: true, contactName: el.first_name.value });
         if (typeof window !== 'undefined') window.scrollTo(0, 0);

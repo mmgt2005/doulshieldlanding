@@ -28,6 +28,7 @@ Warm/maternal treatment, cream background `#FBF5ED`, Newsreader (serif) + Mulish
 | Prop | Section | Purpose |
 |------|---------|---------|
 | `apiBaseUrl` | Integrations | Base URL of the DoulaShield API, e.g. `https://api.doulashield.com`. Blank = prototype mode (payloads logged to console only, no network call). |
+| `turnstileSiteKey` | Integrations | Cloudflare Turnstile site key (public, safe to embed). Blank = bot protection off — all 4 lead forms submit exactly as before, no `turnstile_token` sent. See "Bot protection" below. |
 | `individualWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Individual Provider series (2 parts). |
 | `agencyWebinarPart1VideoUrl` / `Part2VideoUrl` | Webinar videos | Share/embed URL for each part of the Agency series (2 parts). |
 
@@ -80,6 +81,35 @@ YouTube, Vimeo, or Loom depending on what's set in Tweaks, so there's no single 
 
 Lead POST is **fire-and-forget** — the UI advances to the success/video state immediately
 and does not wait for or gate on the API response.
+
+### Bot protection (Cloudflare Turnstile) — frontend wired, backend enforcement pending
+
+All 4 lead forms (webinar, quiz individual, quiz agency, contact) optionally render a
+Cloudflare Turnstile widget just above their submit button, driven by the `turnstileSiteKey`
+Tweaks prop above. The Turnstile script loads in **explicit render mode**
+(`<script ...?onload=onloadTurnstileApi&render=explicit">` in `<helmet>`), and each widget
+is rendered on demand via `mountTurnstileWidgets()` (called from `componentDidMount`/
+`componentDidUpdate`, plus the script's own `onload` callback) rather than auto-rendering —
+this is required because each form lives inside an `<sc-if>` that genuinely unmounts the
+form (switching quiz tabs, "Retake the quiz", a successful submit), so a widget is destroyed
+and freshly re-rendered every time its form reappears. Verified safe against React wiping
+the widget's injected DOM on unrelated re-renders (e.g. clicking between the webinar's
+track cards) — the containers are declared with zero template children, which this
+templating system's compiled output never touches once rendered.
+
+When a widget completes, its token lands in `state.turnstileTokens` and rides along on
+that form's existing `sendLead(...)` payload as `turnstile_token` — stripped like any other
+empty field when blank (feature off, or not yet completed).
+
+**Server-side verification is NOT implemented in this repo and must be added on the
+Railway backend** before this actually blocks anything: for each of the 4 lead endpoints,
+call `https://challenges.cloudflare.com/turnstile/v0/siteverify` with a **secret key**
+(`TURNSTILE_SECRET_KEY` env var or similar — never exposed client-side, separate from the
+public `turnstileSiteKey` above) and reject the lead if verification fails. Until that's
+built, the token is collected but nothing checks it — bots aren't actually blocked yet,
+only the client-side half is done. `sendLead` stays fire-and-forget on purpose: a legit
+visitor's token just verifies and they see nothing different; a bot's missing/forged token
+gets silently dropped server-side once that half exists — no new error UI needed here.
 
 ### CORS (required for live submissions)
 The browser calls the API cross-origin, so the landing page's origin must be in the backend
@@ -215,6 +245,10 @@ hash → falls back to home. Case-insensitive. A part-link still requires regist
    every PA Medicaid MCO") with **placeholder** wordmarks + a trademark disclaimer. Swap in
    real logo files when available (see note below); the MCO list lives in the `mcos` array in
    the logic class.
+8. **Turnstile bot protection (frontend wired, backend verification pending):** set
+   `turnstileSiteKey` in Tweaks to turn the widgets on across all 4 lead forms. Backend must
+   add `siteverify` checks on all 4 lead endpoints using a secret key before this actually
+   blocks anything — see "Bot protection" under "Lead capture — API wiring" above.
 
 ---
 
